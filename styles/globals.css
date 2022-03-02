@@ -1,9 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Kanit:wght@300&display=swap");
 html,
 body {
-  padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: "Kanit", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -13,4 +14,153 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+.form-control::placeholder {
+  font-weight: bold;
+}
+.form-control {
+  font-weight: bold;
+}
+
+.box {
+  padding: 1.25em 0em;
+  height: 120px;
+  margin: auto;
+  display: flex;
+  border-radius: 0.5em;
+  font-size: 1.75em;
+  font-weight: bold;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.box-primary:hover {
+  background-color: #216694 !important;
+}
+.box-primary:active {
+  box-shadow: 0 0 0 0.2rem rgb(33 102 148 / 50%);
+  transition: none;
+}
+.box-secondary:active {
+  box-shadow: 0 0 0 0.2rem rgb(31 139 77 / 50%);
+  transition: none;
+}
+.box-secondary:hover {
+  background-color: #1f8b4d !important;
+}
+.lg {
+  font-size: 2em;
+}
+a:hover {
+  text-decoration: none;
+}
+.day-of-week,
+.date-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px 4px;
+  padding: 10px 10px 10px 10px;
+}
+.day-of-week {
+  text-align: center;
+}
+.date-grid {
+  text-align: center;
+  padding-top: 30px;
+  background-color: #f0f0f0;
+}
+
+.date-grid .normal .number-day:hover {
+  color: #fff;
+  background-color: #aaa;
+  cursor: pointer;
+}
+.date-grid .day {
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #fff;
+  cursor: pointer;
+}
+.date-grid .event {
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: #fff;
+  background-color: #1abc9c;
+  cursor: pointer;
+}
+.date-grid .eventPre {
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: #fff;
+  background-color: #fdcb6e;
+  cursor: pointer;
+}
+.date-grid .eventPre:hover {
+  box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);
+}
+.date-grid .day:hover {
+  box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);
+}
+/* .date-grid .day:active {
+  color: #fff;
+  background-color: #fdcb6e;
+} */
+
+.date-grid .currentDay {
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: #fff;
+  background-color: #3e8dc0;
+  cursor: pointer;
+}
+
+.date-grid .week {
+  color: #888;
+  background-color: #fff;
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.date-grid .weekend {
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #fff;
+  color: #ccc;
+}
+
+.calendarMain {
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.08), 0 0 6px rgba(0, 0, 0, 0.05);
+}
+.Ctitle {
+  border-radius: 6px 6px 0px 0px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #2980b9;
+}
+.Ctitle .monthTitle {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 800;
+}
+.color {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto auto;
+  grid-gap: 10px;
 }
