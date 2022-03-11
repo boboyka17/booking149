@@ -3,7 +3,7 @@ import urlImg from "../public/hero.jpg";
 import Hero from "../components/hero";
 export default () => {
   return (
-    <div className="container">
+    <div className="container login">
       <Hero />
     </div>
   );

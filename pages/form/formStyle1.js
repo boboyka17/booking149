@@ -8,11 +8,45 @@ import * as Yup from "yup";
 
 export default function formStyle1() {
   const router = useRouter();
-  const setData = (data) => {
-    localStorage.setItem("bookingData", JSON.stringify(data));
-    router.push("../Datepicker");
+  const asyncPostCall = async (payload) => {
+    try {
+      const response = await fetch("http://localhost:3000/api", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+      const data = await response.json();
+      // enter you logic when the fetch is successful
+      console.log(data);
+    } catch (error) {
+      // enter your logic for when there is an error (ex. error toast)
+      console.log(error);
+    }
   };
 
+  // const setData = (data) => {
+  //   // localStorage.setItem("bookingData", JSON.stringify(data));
+  //   // router.push("../Datepicker");
+
+  //   fetch("http://localhost:3000/api", {
+  //     method: "POST", // or 'PUT'
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(data),
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log("Success:", data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error:", error);
+  //     });
+  // };
+
+  // Schema form
   const validationSchema = Yup.object().shape({
     idCard: Yup.string()
       .required("กรุณาป้อนเลขประจำตัวประชาชน")
@@ -25,6 +59,7 @@ export default function formStyle1() {
     Gender: Yup.string().required("กรุณาเลือกเพศของท่าน"),
   });
 
+  // formik setting
   const formik = useFormik({
     initialValues: {
       idCard: "",
@@ -37,7 +72,8 @@ export default function formStyle1() {
     validateOnChange: false,
     validateOnBlur: false,
     onSubmit: (data) => {
-      setData(data);
+      // setData(data);
+      asyncPostCall(data);
     },
   });
   return (

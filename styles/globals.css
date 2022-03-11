@@ -164,3 +164,23 @@ a:hover {
   grid-template-columns: auto auto auto auto auto auto;
   grid-gap: 10px;
 }
+.container.login {
+  display: flex;
+  height: calc(var(--vh, 1vh) * 75);
+  align-items: center;
+  justify-content: center;
+}
+.login-box {
+  box-shadow: 0px 0px 10px 2px rgb(0 0 0 / 12%);
+  width: 350px;
+}
+.avatar {
+  vertical-align: middle;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+}
+.avatar-btn {
+  border: none;
+  background: none;
+}

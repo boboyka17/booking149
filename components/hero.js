@@ -3,6 +3,7 @@ import urlImg from "../public/hero.jpg";
 import Link from "next/link";
 import Image from "next/image";
 function Hero() {
+  console.log(process.env.customKey);
   return (
     <div className="Hero">
       <section className="pt-4 mb-5 pt-md-11">
