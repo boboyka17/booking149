@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Router from "next/router";
 import checkLog from "../../auth/checkLog";
-import Menu from "./ui/Menu";
+import Menu from "../../components/Menu/Menu";
 import axios from "axios";
 export default function index() {
   // check Auth
