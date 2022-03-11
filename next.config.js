@@ -1,5 +1,5 @@
 module.exports = {
   env: {
-    URL: "https://server-booking149.herokuapp.com/",
+    URL: "https://server-booking149.herokuapp.com",
   },
 };
