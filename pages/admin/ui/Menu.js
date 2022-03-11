@@ -1,10 +1,6 @@
 import React from "react";
 import Link from "next/link";
 export default function Menu({ name, items }) {
-  items.map((elm) => {
-    console.log(elm);
-  });
-
   return (
     <div className="card border-0">
       <div class="card-header bg-dark text-white h4">{name}</div>
