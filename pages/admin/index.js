@@ -18,7 +18,7 @@ export default function index() {
 
   const getEvent = async () => {
     try {
-      const res = await axios.get("http://localhost:3001/api/events");
+      const res = await axios.get(`${process.env.URL}/api/events`);
       const reversedItems = res.data.map((item) => item).reverse();
       setEvent(reversedItems);
     } catch (err) {
