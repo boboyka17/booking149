@@ -17,9 +17,9 @@ export default function Login() {
         data: payload,
       });
       if (res.data.token != null) {
-        setIsLoading(false);
         localStorage.setItem("token", res.data.token);
         router.push("/admin");
+        setIsLoading(false);
       } else {
         setIsLoading(false);
         Swal.fire(res.data.message, "", "error");
