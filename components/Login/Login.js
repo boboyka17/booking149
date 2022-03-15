@@ -6,7 +6,10 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/router";
 export default function Login() {
   const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState(false);
   const handleSubmit = async (payload) => {
+    setIsLoading(true);
     try {
       const res = await axios({
         method: "POST",
@@ -14,9 +17,11 @@ export default function Login() {
         data: payload,
       });
       if (res.data.token != null) {
+        setIsLoading(false);
         localStorage.setItem("token", res.data.token);
         router.push("/admin");
       } else {
+        setIsLoading(false);
         Swal.fire(res.data.message, "", "error");
       }
     } catch (err) {
@@ -100,11 +105,28 @@ export default function Login() {
               </div>
             </div>
             <div className="row">
-              <div className="col-12">
-                <button type="submit" className="btn btn-primary btn-block">
-                  เข้าสู่ระบบ
-                </button>
-              </div>
+              {isLoading ? (
+                <div className="col-12">
+                  <button
+                    class="btn btn-primary btn-block"
+                    type="button"
+                    disabled
+                  >
+                    <span
+                      class="spinner-border spinner-border-sm mr-3"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    กำลังเข้าสู่ระบบ
+                  </button>
+                </div>
+              ) : (
+                <div className="col-12">
+                  <button type="submit" className="btn btn-primary btn-block">
+                    เข้าสู่ระบบ
+                  </button>
+                </div>
+              )}
             </div>
           </form>
         </div>

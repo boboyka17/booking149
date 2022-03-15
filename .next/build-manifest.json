@@ -30,11 +30,6 @@
       "static/chunks/main.js",
       "static/chunks/pages/admin.js"
     ],
-    "/admin/eventControl": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/admin/eventControl.js"
-    ],
     "/login": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
