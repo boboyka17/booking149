@@ -2,16 +2,17 @@ import React, { useEffect, useState } from "react";
 import decode from "jwt-decode";
 import Router from "next/router";
 import Link from "next/link";
+import Swal from "sweetalert2";
 export default function navbar() {
   const [isLogin, setIslogin] = useState(false);
   const [profile, setProfile] = useState({});
   const [token, setToken] = useState("");
   const handleLogout = () => {
     localStorage.removeItem("token");
+    Router.push("/login");
+    setToken("");
     setIslogin(false);
     setProfile({});
-    setToken("");
-    Router.push("/login");
   };
   // v1.0.1
   useEffect(() => {
@@ -36,23 +37,6 @@ export default function navbar() {
     [token],
     [isLogin]
   );
-  // v1.1
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   if (token) {
-  //     const data = decode(token);
-  //     setProfile(data);
-  //   }
-  // });
-
-  // useEffect(() => {
-  //   if (Object.keys(profile).length === 0 && profile.constructor === Object) {
-  //     setIslogin(false);
-  //   } else {
-  //     setIslogin(true);
-  //   }
-  // }, [profile]);
 
   return (
     <nav className="container-fluid bg-white sticky-top shadow p-3 mb-5 bg-body rounded">

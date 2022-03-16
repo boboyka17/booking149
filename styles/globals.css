@@ -105,6 +105,15 @@ a:hover {
   background-color: #fdcb6e;
   cursor: pointer;
 }
+.date-grid .currentDay.eventPre {
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: #fff;
+  background-color: #fdcb6e;
+  cursor: pointer;
+}
 .date-grid .eventPre:hover {
   box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);
 }
@@ -126,6 +135,30 @@ a:hover {
   cursor: pointer;
 }
 
+.date-grid .currentDay span {
+  background: #3e8dc0;
+  border-radius: 0.8em;
+  -moz-border-radius: 0.8em;
+  -webkit-border-radius: 0.8em;
+  color: #ffffff;
+  display: inline-block;
+  font-weight: bold;
+  line-height: 1.6em;
+  text-align: center;
+  width: 1.6em;
+}
+.cirle {
+  display: block;
+  width: 0.8em;
+  height: 0.8em;
+  border-radius: 0.4em;
+}
+.cirle.online {
+  background: #208842;
+}
+.cirle.offline {
+  background: #dd0612;
+}
 .date-grid .week {
   color: #888;
   background-color: #fff;

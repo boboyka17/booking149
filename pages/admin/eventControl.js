@@ -79,7 +79,9 @@ export default function eventControl() {
 
   const getEvent = async () => {
     try {
+      setIsLoading(true);
       const res = await axios.get(`${process.env.URL}/api/events`);
+      setIsLoading(false);
       setEvent(res.data);
     } catch (error) {
       console.error(error);
@@ -144,7 +146,7 @@ export default function eventControl() {
   }, []);
   const color = [
     "#16a085",
-    "#2980b9",
+    "#005C9F",
     "#9b59b6",
     "#e67e22",
     "#e74c3c",
@@ -244,7 +246,7 @@ export default function eventControl() {
       setIsload(true);
     }
   }, [isload]);
-
+  const [isLoading, setIsLoading] = useState(false);
   return (
     <>
       {isload ? (
@@ -319,52 +321,65 @@ export default function eventControl() {
                 </div>
               </div>
               <hr />
-              <div class="accordion" id="accordionExample">
-                {event.map((item, index) => {
-                  return (
-                    <div class="card">
-                      <nav
-                        class="navbar d-flex justify-content-between text-white"
-                        data-toggle="collapse"
-                        data-target={`#collapse_${index}`}
-                        aria-expanded="true"
-                        aria-controls="collapseOne"
-                        role="button"
-                        style={{ backgroundColor: item.color }}
-                      >
-                        <h4>{item.title}</h4>
-                        <span className="box-color"></span>
-                      </nav>
+              {!isLoading ? (
+                <div class="accordion" id="accordionExample">
+                  {event.map((item, index) => {
+                    return (
+                      <div class="card">
+                        <nav
+                          class="navbar d-flex justify-content-between text-white"
+                          data-toggle="collapse"
+                          data-target={`#collapse_${index}`}
+                          aria-expanded="true"
+                          aria-controls="collapseOne"
+                          role="button"
+                          style={{ backgroundColor: item.color }}
+                        >
+                          <h4>{item.title}</h4>
+                          <span className="box-color"></span>
+                        </nav>
 
-                      <div
-                        id={`collapse_${index}`}
-                        class="collapse"
-                        data-parent="#accordionExample"
-                      >
-                        <div class="card-body">
-                          <ul class="list-group list-group-flush">
-                            {item.eventDays.map((child) => {
-                              return (
-                                <li class="list-group-item">{thDate(child)}</li>
-                              );
-                            })}
-                          </ul>
-                          <div className="text-center">
-                            <button
-                              className=" btn btn-danger mt-3"
-                              onClick={() => {
-                                handleDelete(item._id, index, item.title);
-                              }}
-                            >
-                              ลบกิจกรรม
-                            </button>
+                        <div
+                          id={`collapse_${index}`}
+                          class="collapse"
+                          data-parent="#accordionExample"
+                        >
+                          <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                              {item.eventDays.map((child) => {
+                                return (
+                                  <li class="list-group-item">
+                                    {thDate(child)}
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                            <div className="text-center">
+                              <button
+                                className=" btn btn-danger mt-3"
+                                onClick={() => {
+                                  handleDelete(item._id, index, item.title);
+                                }}
+                              >
+                                ลบกิจกรรม
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div class="text-center ">
+                  <div class="d-flex justify-content-center align-items-center ">
+                    <div class="spinner-border spinner-border-sm" role="status">
+                      <span class="sr-only">Loading...</span>
                     </div>
-                  );
-                })}
-              </div>
+                    <p className="ml-1 mb-0">กำลังโหลดข้อมูล...</p>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="col-lg-8">

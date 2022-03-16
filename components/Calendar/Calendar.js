@@ -148,7 +148,7 @@ export default function Calendar({
           color: eventData ? "white" : "",
         }}
       >
-        {elm + 1}
+        <span>{elm + 1}</span>
       </div>
     );
   });
