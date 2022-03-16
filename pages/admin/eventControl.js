@@ -90,12 +90,14 @@ export default function eventControl() {
 
   const addEvent = async (payload) => {
     try {
+      setIsAdd(true);
       const res = await axios({
         method: "POST",
         url: `${process.env.URL}/api/events`,
         data: payload,
       });
       setEvent((item) => [...item, res.data]);
+      setIsAdd(false);
       // useEffect();
     } catch (error) {
       console.error(error);
@@ -247,6 +249,7 @@ export default function eventControl() {
     }
   }, [isload]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isAdd, setIsAdd] = useState(false);
   return (
     <>
       {isload ? (
@@ -313,10 +316,24 @@ export default function eventControl() {
                           : null}
                       </div>
                     </div>
-
-                    <button type="submit" className="btn btn-success">
-                      เพิ่มกิจกรรม
-                    </button>
+                    {isAdd ? (
+                      <button
+                        type="submit"
+                        className="btn btn-success"
+                        disabled
+                      >
+                        <span
+                          class="spinner-border spinner-border-sm mr-1"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        กำลังเพิ่มกิจกรรม...
+                      </button>
+                    ) : (
+                      <button type="submit" className="btn btn-success">
+                        เพิ่มกิจกรรม
+                      </button>
+                    )}
                   </form>
                 </div>
               </div>
