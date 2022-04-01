@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import urlImg from "../public/hero.jpg";
 import Link from "next/link";
 import Image from "next/image";
+import InputCard from "./InputCard";
 function Hero() {
-  console.log(process.env.customKey);
+  const [toggle, setToggle] = useState(false);
   return (
     <div className="Hero">
       <section className="pt-4 mb-5 pt-md-11">
@@ -30,8 +31,7 @@ function Hero() {
               </h1>
 
               <p className="lead text-center text-md-left text-muted mb-6 mb-lg-8">
-                Build a beautiful, modern website with flexible Bootstrap
-                components built from scratch.
+                ท่านสามารถเลือกวันและช่วงเวลาสำหรับการทำสัญญากู้ยืมเงินเพื่อการประกอบอาชีพคนพิการ
               </p>
 
               <div className="text-center text-md-left">
@@ -40,10 +40,16 @@ function Hero() {
                     เริ่มต้นการจอง
                   </a>
                 </Link>
-                <a href="" className="btn btn-secondary shadow lift me-1">
+                <button
+                  className="btn btn-secondary shadow lift me-1"
+                  onClick={() => {
+                    setToggle(!toggle);
+                  }}
+                >
                   ตรวจสอบสถานะการจอง
-                </a>
+                </button>
               </div>
+              {toggle && <InputCard />}
             </div>
           </div>
         </div>

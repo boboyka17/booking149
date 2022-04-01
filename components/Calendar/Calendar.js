@@ -38,7 +38,9 @@ export default function Calendar({
       setActive([]);
       setTogle(false);
     }
-    setEventDays(active);
+    // sort  array
+    const arr_sort = active.sort((a, b) => Date.parse(a) - Date.parse(b));
+    setEventDays(arr_sort);
     let divArr = [...document.querySelectorAll(".day, .currentDay")];
     // eventChildArrFX(active);
     divArr.map((item) => {

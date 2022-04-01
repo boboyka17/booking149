@@ -7,7 +7,11 @@ const thDate = (date) => {
   });
   const resultTime = dt.toLocaleTimeString("th-TH");
 
-  return resultDate + " " + resultTime + " น.";
+  return {
+    date: resultDate,
+    time: resultTime,
+    full: resultDate + " " + resultTime + "น.",
+  };
 };
 
 export default thDate;

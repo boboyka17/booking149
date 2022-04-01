@@ -220,3 +220,74 @@ a:hover {
 .Toastify__toast-body {
   font-family: "Kanit", sans-serif;
 }
+.box {
+  background-color: #1f1d36;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  font-size: 24px;
+  justify-content: center;
+  text-align: center;
+  height: 120px;
+  margin-bottom: 1em;
+  border-radius: 0.3em;
+}
+.box-p {
+  background-color: #2f2fa2;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  font-size: 24px;
+  justify-content: center;
+  text-align: center;
+  height: 120px;
+  border-radius: 0.3em;
+  cursor: pointer;
+}
+.box-s {
+  background-color: #f64c72;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  font-size: 24px;
+  justify-content: center;
+  text-align: center;
+  height: 120px;
+  border-radius: 0.3em;
+  cursor: pointer;
+}
+.box-head {
+  background-color: #1f1d36;
+  border-radius: 1em;
+  margin-bottom: 1em;
+}
+.noti {
+  position: absolute;
+  height: 40px;
+  width: 40px;
+  top: -10px;
+  font-size: 24px;
+  right: -10px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  display: inline-block;
+  background-color: #2ecc71 !important;
+}
+.box-disable {
+  background-color: #cccccc;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  font-size: 24px;
+  justify-content: center;
+  text-align: center;
+  height: 120px;
+  border-radius: 0.3em;
+  cursor: no-drop !important;
+}
+.Hero::placeholder {
+  font-weight: lighter;
+}
+.Hero {
+  font-weight: lighter;
+}

@@ -1,21 +1,45 @@
 /* eslint-disable-line */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useFormik } from "formik";
 import Link from "next/link";
 import NumberFormat from "react-number-format";
 import * as Yup from "yup";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 const formStyle2 = (props) => {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const setData = (data) => {
-    localStorage.setItem("bookingData", JSON.stringify(data));
-    router.push("../Datepicker");
+  const setData = async (payload) => {
+    setIsLoading(true);
+    try {
+      const { data } = await axios.post(
+        `${process.env.URL}/api/customer`,
+        payload
+      );
+
+      if (data.status) {
+        localStorage.setItem("bookingData", JSON.stringify(data));
+        router.push("../Datepicker");
+        setIsLoading(false);
+      } else {
+        setIsLoading(false);
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดดพลาด",
+          text: "ไม่สามารถบันทึกได้เนื่องจากเลขบัตรประชาชนของท่านถูกนำไปใช้แล้ว กรุณาตรวจสอบสถานะการจอง หรือลองใหม่อีกครั้ง",
+          confirmButtonText: "ยืนยัน",
+        });
+      }
+    } catch (err) {
+      Swal.fire(err.message, "", "error");
+    }
   };
   const validationSchema = Yup.object().shape({
     idCard: Yup.string()
       .required("กรุณาป้อนเลขประจำตัวประชาชน")
-      .matches(/^[0-9\-]{17}$/, "กรุณาป้อนเลขประจำตัวประชาชนให้ครับถ้วน"),
+      .matches(/^[0-9\-]{17}$/, "กรุณาป้อนเลขประจำตัวประชาชนให้ครบถ้วน"),
     FirstName: Yup.string().required("กรุณาป้อนชื่อ"),
     LastName: Yup.string().required("กรุณาป้อนนามสกุล"),
     FirstNameN: Yup.string().required("กรุณาป้อนชื่อ"),
@@ -40,9 +64,13 @@ const formStyle2 = (props) => {
     validateOnChange: false,
     validateOnBlur: false,
     onSubmit: (data) => {
-      setData(data);
+      const newData = { ...data, Type: "B" };
+      setData(newData);
     },
   });
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
   return (
     <div className="container">
       <nav className="nav">
@@ -176,13 +204,29 @@ const formStyle2 = (props) => {
           </div>
         </div>
         <div className="col-md-12 mt-3 mb-3">
-          <button
-            type="submit"
-            className="btn btn-primary btn-lg btn-block"
-            style={{ fontWeight: "bold" }}
-          >
-            บันทึก
-          </button>
+          {isLoading ? (
+            <button
+              type="submit"
+              className="btn btn-primary btn-lg btn-block"
+              style={{ fontWeight: "bold" }}
+              disabled
+            >
+              <span
+                class="spinner-border spinner-border-sm mr-3"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              กำลังบันทึก
+            </button>
+          ) : (
+            <button
+              type="submit"
+              className="btn btn-primary btn-lg btn-block"
+              style={{ fontWeight: "bold" }}
+            >
+              บันทึก
+            </button>
+          )}
         </div>
       </form>
     </div>

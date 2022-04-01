@@ -128,6 +128,7 @@ export default function index() {
 
                   {event.map((item, index) => (
                     <EventBox
+                      title={item.title}
                       date={item.date}
                       id={item._id}
                       callback={callback}

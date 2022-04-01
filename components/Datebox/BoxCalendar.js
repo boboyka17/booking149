@@ -1,6 +1,58 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+import axios from "axios";
+import thDate from "../../helper/thDate";
+import Router from "next/router";
+export default function BoxCalendar({ day, thisDate, id }) {
+  const default_limit = 16;
+  const [active, setActive] = useState(false);
+  const [isset, setIsset] = useState(0);
 
-export default function BoxCalendar({ day, isset, empty, active }) {
+  const handleClick = async () => {
+    const result = await Swal.fire({
+      icon: "warning",
+      title: `คุณแน่ใจไหมที่จะเลือกจองวัน <br>${thDate(thisDate).date}`,
+      showCancelButton: true,
+      confirmButtonText: "ยืนยัน",
+      cancelButtonText: "ยกเลิก",
+    });
+    if (result.isConfirmed) {
+      await Swal.fire({
+        icon: "success",
+        title: "เลือกวันสำเร็จ",
+        confirmButtonText: "ยืนยัน",
+      });
+      localStorage.setItem("bookingID", id);
+      Router.push("/Timepicker");
+    }
+  };
+
+  const clean = (data) => {
+    const num = 0;
+    data.Booking.map((item) => {
+      const temp = item.ref.length;
+      num = num + temp;
+    });
+    return num;
+  };
+
+  const getBook = async (id) => {
+    try {
+      const { data } = await axios.get(`${process.env.URL}/api/booking/${id}`);
+      const newData = clean(data);
+      setActive(false);
+      if (newData < default_limit) {
+        setActive(true);
+      }
+      setIsset(newData);
+      // setData(Date(data[0], data[lenght]));
+    } catch (err) {
+      Swal.fire("error", err.message, "error");
+    }
+  };
+  useEffect(() => {
+    getBook(id);
+  }, [id]);
   return active ? (
     <div
       style={{ fontSize: "2em" }}
@@ -17,6 +69,7 @@ export default function BoxCalendar({ day, isset, empty, active }) {
             fontSize: "1.5rem",
             fontWeight: "bold",
           }}
+          onClick={handleClick}
         >
           จองคิว
         </button>
@@ -41,7 +94,7 @@ export default function BoxCalendar({ day, isset, empty, active }) {
             }}
           >
             <p className="mb-0">ว่าง</p>
-            <h1>{empty}</h1>
+            <h1>{default_limit - isset}</h1>
           </div>
         </div>
       </div>

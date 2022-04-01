@@ -1,56 +1,47 @@
 /* eslint-disable-line */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useFormik } from "formik";
 import Link from "next/link";
 import NumberFormat from "react-number-format";
 import * as Yup from "yup";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 export default function formStyle1() {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const asyncPostCall = async (payload) => {
+  const setData = async (payload) => {
+    setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:3000/api", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-      const data = await response.json();
-      // enter you logic when the fetch is successful
-      console.log(data);
-    } catch (error) {
-      // enter your logic for when there is an error (ex. error toast)
-      console.log(error);
+      const { data } = await axios.post(
+        `${process.env.URL}/api/customer`,
+        payload
+      );
+
+      if (data.status) {
+        localStorage.setItem("bookingData", JSON.stringify(data));
+        router.push("../Datepicker");
+        setIsLoading(false);
+      } else {
+        setIsLoading(false);
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดดพลาด",
+          text: "ไม่สามารถบันทึกได้เนื่องจากเลขบัตรประชาชนของท่านถูกนำไปใช้แล้ว กรุณาตรวจสอบสถานะการจอง หรือลองใหม่อีกครั้ง",
+          confirmButtonText: "ยืนยัน",
+        });
+      }
+    } catch (err) {
+      Swal.fire(err.message, "", "error");
     }
   };
-
-  // const setData = (data) => {
-  //   // localStorage.setItem("bookingData", JSON.stringify(data));
-  //   // router.push("../Datepicker");
-
-  //   fetch("http://localhost:3000/api", {
-  //     method: "POST", // or 'PUT'
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(data),
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log("Success:", data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error:", error);
-  //     });
-  // };
 
   // Schema form
   const validationSchema = Yup.object().shape({
     idCard: Yup.string()
       .required("กรุณาป้อนเลขประจำตัวประชาชน")
-      .matches(/^[0-9\-]{17}$/, "กรุณาป้อนเลขประจำตัวประชาชนให้ครับถ้วน"),
+      .matches(/^[0-9\-]{17}$/, "กรุณาป้อนเลขประจำตัวประชาชนให้ครบถ้วน"),
     FirstName: Yup.string().required("กรุณาป้อนชื่อ"),
     LastName: Yup.string().required("กรุณาป้อนนามสกุล"),
     Phone: Yup.string()
@@ -72,10 +63,15 @@ export default function formStyle1() {
     validateOnChange: false,
     validateOnBlur: false,
     onSubmit: (data) => {
-      // setData(data);
-      asyncPostCall(data);
+      const newData = { ...data, Type: "A" };
+      setData(newData);
     },
   });
+
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
+
   return (
     <div className="container">
       <nav className="nav">
@@ -177,13 +173,29 @@ export default function formStyle1() {
           </div>
         </div>
         <div className="col-md-12 mt-3 mb-3">
-          <button
-            type="submit"
-            className="btn btn-primary btn-lg btn-block"
-            style={{ fontWeight: "bold" }}
-          >
-            บันทึก
-          </button>
+          {isLoading ? (
+            <button
+              type="submit"
+              className="btn btn-primary btn-lg btn-block"
+              style={{ fontWeight: "bold" }}
+              disabled
+            >
+              <span
+                class="spinner-border spinner-border-sm mr-3"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              กำลังบันทึก
+            </button>
+          ) : (
+            <button
+              type="submit"
+              className="btn btn-primary btn-lg btn-block"
+              style={{ fontWeight: "bold" }}
+            >
+              บันทึก
+            </button>
+          )}
         </div>
       </form>
     </div>

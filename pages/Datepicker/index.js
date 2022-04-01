@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import PaginatedItems from "../../components/Datebox/PaginatedItems";
 import moment from "moment";
 import "moment/locale/th";
+import Swal from "sweetalert2";
+import axios from "axios";
 const obj = {
   year: [
     {
@@ -44,91 +46,94 @@ const obj = {
   ],
 };
 
-const Date = (first_date, second_date) => {
-  // function
-
-  function dayCount(val) {
-    let result = moment(val, "MM").daysInMonth();
-    return result;
-  }
-
-  // Contructor
-
-  let month_first = 1 + moment(first_date, "DD/MM/YYYY").month();
-  let month_end = 1 + moment(second_date, "DD/MM/YYYY").month();
-  let year_first = moment(first_date, "DD/MM/YYYY").year();
-  // let year_end = moment(second_date, "DD/MM/YYYY").year();
-
-  if (month_first == month_end) {
-    let first = moment(first_date, "DD/MM/YYYY").date();
-    let last = moment(second_date, "DD/MM/YYYY").date();
-    let days = [];
-    for (let i = first; i <= last; i++) {
-      days.push(i);
-    }
-    const json = [
-      {
-        days: days,
-        mounth: month_first,
-        year: year_first,
-      },
-    ];
-  }
-
-  if (month_end - month_first > 0) {
-    let first = moment(first_date, "DD/MM/YYYY").date();
-    let last = moment(second_date, "DD/MM/YYYY").date();
-    let year = moment(second_date, "DD/MM/YYYY").year();
-    let days = [];
-    let month = [];
-    let check = 0;
-    let test = [];
-    let lenghtCheck = month_end - month_first;
-    for (let i = month_first; i <= month_end; i++) {
-      let temp = {};
-      if (check == 0) {
-        for (let j = first; j <= dayCount(i); j++) {
-          days.push({ dayTitle: j });
-        }
-      }
-      if (check == 1 && check != lenghtCheck) {
-        for (let j = 1; j <= dayCount(i); j++) {
-          days.push({ dayTitle: j });
-        }
-      }
-      if (check == lenghtCheck) {
-        for (let j = 1; j <= last; j++) {
-          days.push({ dayTitle: j });
-        }
-      }
-      month.push({ monthTitle: i, day: days });
-      days = [];
-      check++;
-    }
-
-    const calendar = { year: [{ yearTitle: year, month }] };
-    console.log(calendar);
-    return calendar;
-  }
-
-  // const data = console.log(data);
-};
-
 export default function Datepicker() {
   // let date = moment().add(543, "year").format("D MMMM YYYY");
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState([]);
   const router = useRouter();
-  const json = Date("3/2/2565", "13/4/2566");
   const goBack = () => {
     localStorage.removeItem("bookingData");
     router.back();
+  };
+
+  const clean = (data) => {
+    // sub
+    function get_month(date) {
+      const temp = date.map((item) => {
+        const dt = new Date(item);
+        const month = dt.getMonth();
+        return month;
+      });
+      const newMonth = [...new Set(temp)];
+      return newMonth;
+    }
+    // main
+    const date = data.map((item) => item.dateTitle);
+    const month = get_month(date);
+    // main oBj
+    const Obj = month.map((item, index) => {
+      // Sub  Obj
+      const child = date.map((child_item, index) => {
+        const dt = new Date(child_item);
+        const month = dt.getMonth();
+        const days = dt.getDate();
+        if (item == month) {
+          return {
+            id: data[index]._id,
+            days: days,
+          };
+        }
+      });
+
+      const year = date.map((child_item) => {
+        const dt = new Date(child_item);
+        const year = dt.getFullYear();
+        return year;
+      });
+
+      const filteredArr = child.filter((elm) => elm);
+
+      const json = {
+        year: year[index],
+        month: item,
+        days: filteredArr,
+      };
+      return json;
+    });
+    return Obj;
+  };
+
+  const getDate = async () => {
+    try {
+      const { data } = await axios.get(`${process.env.URL}/api/booking/`);
+      const newData = clean(data);
+      setData(newData);
+      // setData(Date(data[0], data[lenght]));
+    } catch (err) {
+      Swal.fire("error", err.message, "error");
+    }
   };
 
   useEffect(() => {
     const data = localStorage.getItem("bookingData");
     if (data == null) {
       goBack();
+    } else {
+      setIsLoading(false);
+      getDate();
     }
-  });
+  }, []);
+  if (isLoading) {
+    return (
+      <div className="container login">
+        <div className="text-center">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden"></span>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container">
@@ -139,11 +144,8 @@ export default function Datepicker() {
           </button>
         </div>
       </nav>
-
       <div>
-        {/* {date} */}
-        <PaginatedItems itemsPerPage={1} data={json} />
-        {/* <BoxCalendar day="วันที่ 1" empty="1" isset="2" /> */}
+        <PaginatedItems itemsPerPage={1} data={data} />
       </div>
     </div>
   );
